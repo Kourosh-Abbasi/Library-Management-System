@@ -1,4 +1,6 @@
-//Kourosh Abbasi////////////////////////////////////////////////////////////////////
+////////////////////////////******************/////////////////////////////////
+////////////////////////////**Kourosh Abbasi**/////////////////////////////////
+////////////////////////////******************/////////////////////////////////
 package org.example;
 
 import java.io.*;
@@ -23,10 +25,27 @@ public class Library {
         this.libraryPassword = libraryPassword;
         CheckFiles();
         RepoUpdater();
+        if (!this.bookRepo.isEmpty()) {
+            booksId = this.bookRepo.getLast().bookId + 1;
+        }
+        if (!this.userRepo.isEmpty()) {
+            usersId = this.userRepo.getLast().userId + 1;
+        }
+        if (!this.rentRepo.isEmpty()) {
+            rentsId = this.rentRepo.getLast().rentId + 1;
+        }
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     //Methods :
+    public void Welcome() {
+        System.out.println("*** Welcome to " + this.libraryName + " ***");
+        System.out.println("#Operation hours : " + this.operationHours);
+        System.out.println("#For see options write <help>");
+        System.out.println("#For exit write <exit>");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
 
     public void CheckFiles() {
         try {
@@ -318,6 +337,15 @@ public class Library {
         if (command.contains("exit")) {
             return true;
         }
+        if (command.contains("hello")) {
+            return true;
+        }
+        if (command.contains("mew") || command.contains("meow")) {
+            return true;
+        }
+        if (command.contains("fuck")) {
+            return true;
+        }
         String[] c2 = command.split(":");
         if (c2.length < 3) {
             return false;
@@ -370,22 +398,32 @@ public class Library {
     }
 
     public void RunByCommand() {
+        Welcome();
         for (; ; ) {
             Scanner input = new Scanner(System.in);
             String command;
-            System.out.println("Enter a command and press [Enter] : ");
+            System.out.println("## Write a command and press [Enter] : ");
             for (; ; ) {
                 System.out.print(">>> ");
                 command = input.nextLine();
                 if (CheckCommand(command)) {
                     break;
                 }
-                System.out.println("Command not found!!");
+                System.out.println("Command not found :(");
+                System.out.println("## Write a command and press [Enter] : ");
             }
             command = command.toLowerCase();
             if (command.contains("help")) {
                 ShowOptions();
-                continue;
+            }
+            if (command.contains("hello")) {
+                System.out.println("Hello baby ;)");
+            }
+            if (command.contains("mew") || command.contains("meow")) {
+                System.out.println("What a lovely kitten :)");
+            }
+            if (command.contains("fuck")) {
+                System.out.println("Fuck you too :|");
             }
             if (command.contains("exit")) {
                 return;
@@ -430,7 +468,7 @@ public class Library {
                     break;
                 }
                 default: {
-                    ShowOptions();
+                    continue;
                 }
             }
         }
