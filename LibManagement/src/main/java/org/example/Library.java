@@ -166,7 +166,12 @@ public class Library {
             System.out.println("Password is incorrect :(");
             return;
         }
-        this.bookRepo.remove(bookId - 1);
+        for (int i = 0; i < this.bookRepo.size(); i++) {
+            if (this.bookRepo.get(i).bookId == bookId) {
+                this.bookRepo.remove(i);
+                break;
+            }
+        }
         System.out.println("*** Book removed successfully ***");
         RepoSaver();
     }
@@ -195,7 +200,12 @@ public class Library {
             System.out.println("Password is incorrect :(");
             return;
         }
-        this.userRepo.remove(userId - 1);
+        for (int i = 0; i < this.userRepo.size(); i++) {
+            if (this.userRepo.get(i).userId == userId) {
+                this.userRepo.remove(i);
+                break;
+            }
+        }
         System.out.println("*** User removed successfully ***");
         RepoSaver();
     }
@@ -214,12 +224,25 @@ public class Library {
             System.out.println("Password is incorrect :(");
             return;
         }
-        if (!this.bookRepo.get(bookId - 1).isAvailable) {
-            System.out.println("Book is already rented :(");
-            return;
+        int bookIndex = 0, userIndex = 0;
+        for (int i = 0; i < this.userRepo.size(); i++) {
+            if (this.userRepo.get(i).userId == userId) {
+                userIndex = i;
+            }
+
         }
-        this.bookRepo.get(bookId - 1).isAvailable = false;
-        Rent rent = new Rent(this.rentsId, new Date().toString(), this.userRepo.get(userId - 1), this.bookRepo.get(bookId - 1));
+        for (int i = 0; i < this.bookRepo.size(); i++) {
+            if (this.bookRepo.get(i).bookId == bookId) {
+                if (!this.bookRepo.get(i).isAvailable) {
+                    System.out.println("Book is already rented :(");
+                    return;
+                }
+                bookIndex = i;
+                this.bookRepo.get(i).isAvailable = false;
+                break;
+            }
+        }
+        Rent rent = new Rent(this.rentsId, new Date().toString(), this.userRepo.get(userIndex), this.bookRepo.get(bookIndex));
         this.rentRepo.add(rent);
         System.out.println("*** Book rented successfully ***");
         RepoSaver();
@@ -237,7 +260,12 @@ public class Library {
         }
         for (int i = 0; i < this.rentRepo.size(); i++) {
             if (this.rentRepo.get(i).book.bookId == bookId && this.rentRepo.get(i).user.userId == userId) {
-                this.bookRepo.get(this.rentRepo.get(i).book.bookId - 1).isAvailable = true;
+                for (int j = 0; j < this.bookRepo.size(); j++) {
+                    if (this.bookRepo.get(j).bookId == bookId) {
+                        this.bookRepo.get(j).isAvailable = true;
+                        break;
+                    }
+                }
                 this.rentRepo.remove(i);
                 break;
             }
@@ -331,19 +359,24 @@ public class Library {
     ///////////////////////////////////////////////////////////////////////////////
     public boolean CheckCommand(String command) {
         command = command.toLowerCase();
-        if (command.contains("help")) {
-            return true;
-        }
-        if (command.contains("exit")) {
-            return true;
-        }
-        if (command.contains("hello")) {
-            return true;
-        }
-        if (command.contains("mew") || command.contains("meow")) {
-            return true;
-        }
-        if (command.contains("fuck")) {
+        command = command.trim();
+        if (command.equals("fuck")
+                || command.equals("how are you")
+                || command.equals("i love you")
+                || command.equals("help")
+                || command.equals("exit")
+                || command.equals("hello")
+                || command.equals("hi")
+                || command.equals("mew")
+                || command.equals("meow")
+                || command.equals("fuck you")
+                || command.equals("fuckyou")
+                || command.equals("fckyou")
+                || command.equals("fukyou")
+                || command.equals("fck you")
+                || command.equals("fuk you")
+                || command.equals("fck")
+                || command.equals("fuk")) {
             return true;
         }
         String[] c2 = command.split(":");
@@ -413,20 +446,48 @@ public class Library {
                 System.out.println("## Write a command and press [Enter] : ");
             }
             command = command.toLowerCase();
-            if (command.contains("help")) {
-                ShowOptions();
-            }
-            if (command.contains("hello")) {
-                System.out.println("Hello baby ;)");
-            }
-            if (command.contains("mew") || command.contains("meow")) {
-                System.out.println("What a lovely kitten :)");
-            }
-            if (command.contains("fuck")) {
-                System.out.println("Fuck you too :|");
-            }
-            if (command.contains("exit")) {
-                return;
+            command = command.trim();
+            switch (command) {
+                case "fuck":
+                case "fck":
+                case "fuk": {
+                    System.out.println("Don't be rude son");
+                    continue;
+                }
+                case "i love you": {
+                    System.out.println("I love you too honey :)");
+                    continue;
+                }
+                case "how are you": {
+                    System.out.println("Non of your business :|");
+                    continue;
+                }
+                case "help": {
+                    ShowOptions();
+                    continue;
+                }
+                case "mew":
+                case "meow": {
+                    System.out.println("What a lovely kitten :)");
+                    continue;
+                }
+                case "hello":
+                case "hi": {
+                    System.out.println("Hello baby ;)");
+                    continue;
+                }
+                case "fuck you":
+                case "fuckyou":
+                case "fckyou":
+                case "fukyou":
+                case "fuk you":
+                case "fck you": {
+                    System.out.println("Fuck you too :|");
+                    continue;
+                }
+                case "exit": {
+                    return;
+                }
             }
             String[] c2 = command.split(":");
             String c3 = c2[0] + ":" + c2[1] + ":" + c2[2];
