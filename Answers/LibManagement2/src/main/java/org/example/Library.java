@@ -139,7 +139,13 @@ public class Library {
         Scanner input = new Scanner(System.in);
         System.out.print("User password required : ");
         String userPassword = input.nextLine();
-        return this.userRepo.get(userid - 1).password.equals(userPassword);
+        int userIndex=0;
+        for (int i = 0; i < this.userRepo.size(); i++) {
+            if(this.userRepo.get(i).userId==userid){
+                userIndex = i;
+            }
+        }
+        return this.userRepo.get(userIndex).password.equals(userPassword);
     }
 
     ///////////////////////////////////////////////////////////////////////////////
